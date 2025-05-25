@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Resolution Calculator</title>
+    <style>
+        /* Custom CSS provided by the user */
+        body {
+            font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f7f9;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box; /* Ensures padding doesn't increase width */
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f1f8ff;
+            border: 1px solid #d1e8ff;
+            display: none; /* Hidden by default */
+        }
+
+        .resolution-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #3498db;
+        }
+
+        .resolution-card h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+
+        .custom-option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: none; /* Hidden by default */
+        }
+
+        #otherGpuFields, #otherCpuFields {
+            display: none; /* Explicitly hidden */
+        }
+
+        .info-tip {
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .error-message {
+            color: #e74c3c;
+            background-color: #fce4e4;
+            border: 1px solid #e74c3c;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Display Resolution Calculator</h1>
+
+        <div class="info-tip">
+            This tool helps you determine the optimal display resolution based on your GPU and CPU capabilities, screen size, and typical usage.
+        </div>
+
+        <form id="resolutionForm">
+            <div class="form-group">
+                <label for="gpuModel">GPU Model:</label>
+                <select id="gpuModel">
+                    <option value="">Select GPU model</option>
+                    <optgroup label="NVIDIA RTX 50 Series">
+                        <option value="rtx5090">NVIDIA RTX 5090</option>
+                        <option value="rtx5080">NVIDIA RTX 5080</option>
+                        <option value="rtx5070">NVIDIA RTX 5070</option>
+                        <option value="rtx5060">NVIDIA RTX 5060</option>
+                    </optgroup>
+                    <optgroup label="NVIDIA RTX 40 Series">
+                        <option value="rtx4090">NVIDIA RTX 4090</option>
+                        <option value="rtx4080s">NVIDIA RTX 4080 Super</option>
+                        <option value="rtx4080">NVIDIA RTX 4080</option>
+                        <option value="rtx4070ts">NVIDIA RTX 4070 Ti Super</option>
+                        <option value="rtx4070t">NVIDIA RTX 4070 Ti</option>
+                        <option value="rtx4070s">NVIDIA RTX 4070 Super</option>
+                        <option value="rtx4070">NVIDIA RTX 4070</option>
+                        <option value="rtx4060t">NVIDIA RTX 4060 Ti</option>
+                        <option value="rtx4060">NVIDIA RTX 4060</option>
+                    </optgroup>
+                    <optgroup label="NVIDIA RTX 30 Series">
+                        <option value="rtx3090t">NVIDIA RTX 3090 Ti</option>
+                        <option value="rtx3090">NVIDIA RTX 3090</option>
+                        <option value="rtx3080t">NVIDIA RTX 3080 Ti</option>
+                        <option value="rtx3080">NVIDIA RTX 3080</option>
+                        <option value="rtx3070t">NVIDIA RTX 3070 Ti</option>
+                        <option value="rtx3070">NVIDIA RTX 3070</option>
+                        <option value="rtx3060t">NVIDIA RTX 3060 Ti</option>
+                        <option value="rtx3060">NVIDIA RTX 3060</option>
+                        <option value="rtx3050">NVIDIA RTX 3050</option>
+                    </optgroup>
+                    <optgroup label="NVIDIA RTX 20 Series">
+                        <option value="rtx2080t">NVIDIA RTX 2080 Ti</option>
+                        <option value="rtx2080s">NVIDIA RTX 2080 Super</option>
+                        <option value="rtx2080">NVIDIA RTX 2080</option>
+                        <option value="rtx2070s">NVIDIA RTX 2070 Super</option>
+                        <option value="rtx2070">NVIDIA RTX 2070</option>
+                        <option value="rtx2060s">NVIDIA RTX 2060 Super</option>
+                        <option value="rtx2060">NVIDIA RTX 2060</option>
+                    </optgroup>
+                    <optgroup label="NVIDIA GTX 16 & 10 Series">
+                        <option value="gtx1660s">NVIDIA GTX 1660 Super</option>
+                        <option value="gtx1660t">NVIDIA GTX 1660 Ti</option>
+                        <option value="gtx1660">NVIDIA GTX 1660</option>
+                        <option value="gtx1650s">NVIDIA GTX 1650 Super</option>
+                        <option value="gtx1650">NVIDIA GTX 1650</option>
+                        <option value="gtx1080t">NVIDIA GTX 1080 Ti</option>
+                        <option value="gtx1080">NVIDIA GTX 1080</option>
+                        <option value="gtx1070t">NVIDIA GTX 1070 Ti</option>
+                        <option value="gtx1070">NVIDIA GTX 1070</option>
+                        <option value="gtx1060">NVIDIA GTX 1060 6GB</option>
+                        <option value="gtx1050t">NVIDIA GTX 1050 Ti</option>
+                        <option value="gtx1050">NVIDIA GTX 1050</option>
+                    </optgroup>
+                    <optgroup label="AMD RX 9000 Series">
+                        <option value="rx9070xt">AMD RX 9070 XT</option>
+                        <option value="rx9070">AMD RX 9070</option>
+                        <option value="rx9060xt">AMD RX 9060 XT</option>
+                        <option value="rx9060">AMD RX 9060</option>
+                    </optgroup>
+                    <optgroup label="AMD RX 7000 Series">
+                        <option value="rx7900xtx">AMD RX 7900 XTX</option>
+                        <option value="rx7900xt">AMD RX 7900 XT</option>
+                        <option value="rx7900gre">AMD RX 7900 GRE</option>
+                        <option value="rx7800xt">AMD RX 7800 XT</option>
+                        <option value="rx7700xt">AMD RX 7700 XT</option>
+                        <option value="rx7600xt">AMD RX 7600 XT</option>
+                        <option value="rx7600">AMD RX 7600</option>
+                    </optgroup>
+                    <optgroup label="AMD RX 6000 Series">
+                        <option value="rx6950xt">AMD RX 6950 XT</option>
+                        <option value="rx6900xt">AMD RX 6900 XT</option>
+                        <option value="rx6800xt">AMD RX 6800 XT</option>
+                        <option value="rx6800">AMD RX 6800</option>
+                        <option value="rx6750xt">AMD RX 6750 XT</option>
+                        <option value="rx6700xt">AMD RX 6700 XT</option>
+                        <option value="rx6700">AMD RX 6700</option>
+                        <option value="rx6650xt">AMD RX 6650 XT</option>
+                        <option value="rx6600xt">AMD RX 6600 XT</option>
+                        <option value="rx6600">AMD RX 6600</option>
+                        <option value="rx6500xt">AMD RX 6500 XT</option>
+                        <option value="rx6400">AMD RX 6400</option>
+                    </optgroup>
+                    <optgroup label="AMD RX 5000 Series">
+                        <option value="rx5700xt">AMD RX 5700 XT</option>
+                        <option value="rx5700">AMD RX 5700</option>
+                        <option value="rx5600xt">AMD RX 5600 XT</option>
+                        <option value="rx5500xt">AMD RX 5500 XT</option>
+                    </optgroup>
+                    <optgroup label="AMD RX Vega">
+                        <option value="rxvega64">AMD RX Vega 64</option>
+                        <option value="rxvega56">AMD RX Vega 56</option>
+                    </optgroup>
+                    <optgroup label="Intel Arc">
+                        <option value="arcB580">Intel Arc B580</option>
+                        <option value="arcB570">Intel Arc B570</option>
+                        <option value="arcA770">Intel Arc A770</option>
+                        <option value="arcA750">Intel Arc A750</option>
+                        <option value="arcA580">Intel Arc A580</option>
+                        <option value="arcA380">Intel Arc A380</option>
+                        <option value="arcA310">Intel Arc A310</option>
+                    </optgroup>
+                    <option value="other">Other/Custom</option>
+                </select>
+
+                <div id="otherGpuFields" class="custom-option">
+                    <div class="form-group">
+                        <label for="customVram">VRAM (GB):</label>
+                        <input type="number" id="customVram" min="1" max="48" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="customGpuPerformance">GPU Performance Level:</label>
+                        <select id="customGpuPerformance">
+                            <option value="entry">Entry Level</option>
+                            <option value="mid">Mid-Range</option>
+                            <option value="high">High-End</option>
+                            <option value="ultra">Ultra High-End</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cpuModel">CPU Model:</label>
+                <select id="cpuModel">
+                    <option value="">Select CPU model</option>
+                    <optgroup label="Intel 15th Gen (Arrow Lake)">
+                        <option value="i9_15th">Intel Core i9 (15th Gen)</option>
+                        <option value="i7_15th">Intel Core i7 (15th Gen)</option>
+                        <option value="i5_15th">Intel Core i5 (15th Gen)</option>
+                    </optgroup>
+                    <optgroup label="Intel 14th Gen (Raptor Lake Refresh)">
+                        <option value="i9_14900k">Intel Core i9-14900K/KF</option>
+                        <option value="i9_14900">Intel Core i9-14900/F</option>
+                        <option value="i7_14700k">Intel Core i7-14700K/KF</option>
+                        <option value="i7_14700">Intel Core i7-14700/F</option>
+                        <option value="i5_14600k">Intel Core i5-14600K/KF</option>
+                        <option value="i5_14600">Intel Core i5-14600/F</option>
+                        <option value="i5_14400">Intel Core i5-14400/F</option>
+                    </optgroup>
+                    <optgroup label="Intel 13th Gen (Raptor Lake)">
+                        <option value="i9_13900k">Intel Core i9-13900K/KF</option>
+                        <option value="i9_13900">Intel Core i9-13900/F</option>
+                        <option value="i7_13700k">Intel Core i7-13700K/KF</option>
+                        <option value="i7_13700">Intel Core i7-13700/F</option>
+                        <option value="i5_13600k">Intel Core i5-13600K/KF</option>
+                        <option value="i5_13600">Intel Core i5-13600/F</option>
+                        <option value="i5_13400">Intel Core i5-13400/F</option>
+                    </optgroup>
+                    <optgroup label="Intel 12th Gen (Alder Lake)">
+                        <option value="i9_12900k">Intel Core i9-12900K/KF</option>
+                        <option value="i9_12900">Intel Core i9-12900/F</option>
+                        <option value="i7_12700k">Intel Core i7-12700K/KF</option>
+                        <option value="i7_12700">Intel Core i7-12700/F</option>
+                        <option value="i5_12600k">Intel Core i5-12600K/KF</option>
+                        <option value="i5_12600">Intel Core i5-12600/F</option>
+                        <option value="i5_12400">Intel Core i5-12400/F</option>
+                    </optgroup>
+                    <optgroup label="Intel 11th Gen (Rocket Lake)">
+                        <option value="i9_11900k">Intel Core i9-11900K/KF</option>
+                        <option value="i7_11700k">Intel Core i7-11700K/KF</option>
+                        <option value="i5_11600k">Intel Core i5-11600K/KF</option>
+                        <option value="i5_11400">Intel Core i5-11400/F</option>
+                    </optgroup>
+                    <optgroup label="Intel 10th Gen (Comet Lake)">
+                        <option value="i9_10900k">Intel Core i9-10900K/KF</option>
+                        <option value="i7_10700k">Intel Core i7-10700K/KF</option>
+                        <option value="i5_10600k">Intel Core i5-10600K/KF</option>
+                        <option value="i5_10400">Intel Core i5-10400/F</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 9000 Series (Zen 5)">
+                        <option value="r9_9950x">AMD Ryzen 9 9950X</option>
+                        <option value="r9_9900x">AMD Ryzen 9 9900X</option>
+                        <option value="r7_9800x">AMD Ryzen 7 9800X</option>
+                        <option value="r7_9700x">AMD Ryzen 7 9700X</option>
+                        <option value="r5_9600x">AMD Ryzen 5 9600X</option>
+                        <option value="r5_9500x">AMD Ryzen 5 9500X</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 8000 Series (Zen 4)">
+                        <option value="r9_8950x">AMD Ryzen 9 8950X</option>
+                        <option value="r7_8800x">AMD Ryzen 7 8800X</option>
+                        <option value="r5_8600x">AMD Ryzen 5 8600X</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 7000 Series (Zen 4)">
+                        <option value="r9_7950x">AMD Ryzen 9 7950X</option>
+                        <option value="r9_7900x">AMD Ryzen 9 7900X</option>
+                        <option value="r7_7800x">AMD Ryzen 7 7800X3D</option>
+                        <option value="r7_7700x">AMD Ryzen 7 7700X</option>
+                        <option value="r5_7600x">AMD Ryzen 5 7600X</option>
+                        <option value="r5_7500f">AMD Ryzen 5 7500F</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 6000 Series (Zen 3+)">
+                        <option value="r9_6950x">AMD Ryzen 9 6950X</option>
+                        <option value="r7_6800x">AMD Ryzen 7 6800X</option>
+                        <option value="r5_6600x">AMD Ryzen 5 6600X</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 5000 Series (Zen 3)">
+                        <option value="r9_5950x">AMD Ryzen 9 5950X</option>
+                        <option value="r9_5900x">AMD Ryzen 9 5900X</option>
+                        <option value="r7_5800x">AMD Ryzen 7 5800X3D</option>
+                        <option value="r7_5700x">AMD Ryzen 7 5700X</option>
+                        <option value="r5_5600x">AMD Ryzen 5 5600X</option>
+                        <option value="r5_5500">AMD Ryzen 5 5500</option>
+                        <option value="r5_5400g">AMD Ryzen 5 5400G</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 4000 Series (Zen 2)">
+                        <option value="r7_4700g">AMD Ryzen 7 4700G</option>
+                        <option value="r5_4600g">AMD Ryzen 5 4600G</option>
+                        <option value="r3_4300g">AMD Ryzen 3 4300G</option>
+                    </optgroup>
+                    <optgroup label="AMD Ryzen 3000 Series (Zen 2)">
+                        <option value="r9_3950x">AMD Ryzen 9 3950X</option>
+                        <option value="r9_3900x">AMD Ryzen 9 3900X</option>
+                        <option value="r7_3800x">AMD Ryzen 7 3800X</option>
+                        <option value="r7_3700x">AMD Ryzen 7 3700X</option>
+                        <option value="r5_3600x">AMD Ryzen 5 3600X</option>
+                        <option value="r5_3600">AMD Ryzen 5 3600</option>
+                        <option value="r5_3500x">AMD Ryzen 5 3500X</option>
+                    </optgroup>
+                    <option value="other">Other/Custom</option>
+                </select>
+
+                <div id="otherCpuFields" class="custom-option">
+                    <div class="form-group">
+                        <label for="customCpuCores">CPU Cores:</label>
+                        <input type="number" id="customCpuCores" min="2" max="64" step="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="customCpuPerformance">CPU Performance Level:</label>
+                        <select id="customCpuPerformance">
+                            <option value="entry">Entry Level</option>
+                            <option value="mid">Mid-Range</option>
+                            <option value="high">High-End</option>
+                            <option value="ultra">Ultra High-End</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="ramInput">RAM (GB):</label>
+                <input type="number" id="ramInput" min="4" max="128" step="4" value="16">
+            </div>
+
+            <div class="form-group">
+                <label for="screenSize">Monitor Size (inches):</label>
+                <input type="number" id="screenSize" min="13" max="65" step="0.1" value="27">
+            </div>
+
+            <div class="form-group">
+                <label for="usage">Primary Usage:</label>
+                <select id="usage">
+                    <option value="gaming">Gaming</option>
+                    <option value="productivity">Productivity/Office Work</option>
+                    <option value="content">Content Creation (Video/Photo)</option>
+                    <option value="programming">Programming/Development</option>
+                    <option value="browsing">Web Browsing/General Use</option>
+                </select>
+            </div>
+
+            <button type="submit" id="calculateBtn">Calculate Recommended Resolution</button>
+        </form>
+
+        <div id="result">
+            <h2>Recommended Resolution:</h2>
+            <div id="resolutionOutput" class="resolution-card">
+                <p>Please fill out the form and click "Calculate" to see your recommendation.</p>
+            </div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- Hardware Performance Data ---
+        // Performance scores are on a scale, e.g., 0-100, where 100 is top-tier.
+        // VRAM is in GB, Cores is the number of CPU cores.
+
+        const gpuPerformanceData = {
+            // NVIDIA RTX 50 Series (Hypothetical data - adjust as real data becomes available)
+            rtx5090: { performanceScore: 100, vram: 28 },
+            rtx5080: { performanceScore: 95, vram: 20 },
+            rtx5070: { performanceScore: 88, vram: 16 },
+            rtx5060: { performanceScore: 80, vram: 12 },
+
+            // NVIDIA RTX 40 Series
+            rtx4090: { performanceScore: 98, vram: 24 },
+            rtx4080s: { performanceScore: 92, vram: 16 },
+            rtx4080: { performanceScore: 90, vram: 16 },
+            rtx4070ts: { performanceScore: 85, vram: 16 },
+            rtx4070t: { performanceScore: 82, vram: 12 },
+            rtx4070s: { performanceScore: 80, vram: 12 },
+            rtx4070: { performanceScore: 78, vram: 12 },
+            rtx4060t: { performanceScore: 70, vram: 8 },
+            rtx4060: { performanceScore: 65, vram: 8 },
+
+            // NVIDIA RTX 30 Series
+            rtx3090t: { performanceScore: 88, vram: 24 },
+            rtx3090: { performanceScore: 85, vram: 24 },
+            rtx3080t: { performanceScore: 80, vram: 12 },
+            rtx3080: { performanceScore: 78, vram: 10 },
+            rtx3070t: { performanceScore: 72, vram: 8 },
+            rtx3070: { performanceScore: 70, vram: 8 },
+            rtx3060t: { performanceScore: 65, vram: 8 },
+            rtx3060: { performanceScore: 60, vram: 12 },
+            rtx3050: { performanceScore: 45, vram: 8 },
+
+            // NVIDIA RTX 20 Series
+            rtx2080t: { performanceScore: 68, vram: 11 },
+            rtx2080s: { performanceScore: 65, vram: 8 },
+            rtx2080: { performanceScore: 62, vram: 8 },
+            rtx2070s: { performanceScore: 58, vram: 8 },
+            rtx2070: { performanceScore: 55, vram: 8 },
+            rtx2060s: { performanceScore: 50, vram: 8 },
+            rtx2060: { performanceScore: 48, vram: 6 },
+
+            // NVIDIA GTX 16 & 10 Series
+            gtx1660s: { performanceScore: 40, vram: 6 },
+            gtx1660t: { performanceScore: 38, vram: 6 },
+            gtx1660: { performanceScore: 35, vram: 6 },
+            gtx1650s: { performanceScore: 30, vram: 4 },
+            gtx1650: { performanceScore: 28, vram: 4 },
+            gtx1080t: { performanceScore: 55, vram: 11 },
+            gtx1080: { performanceScore: 50, vram: 8 },
+            gtx1070t: { performanceScore: 48, vram: 8 },
+            gtx1070: { performanceScore: 45, vram: 8 },
+            gtx1060: { performanceScore: 35, vram: 6 },
+            gtx1050t: { performanceScore: 25, vram: 4 },
+            gtx1050: { performanceScore: 20, vram: 2 },
+
+            // AMD RX 9000 Series (Hypothetical data - adjust as real data becomes available)
+            rx9070xt: { performanceScore: 93, vram: 20 },
+            rx9070: { performanceScore: 87, vram: 16 },
+            rx9060xt: { performanceScore: 82, vram: 12 },
+            rx9060: { performanceScore: 75, vram: 10 },
+
+            // AMD RX 7000 Series
+            rx7900xtx: { performanceScore: 96, vram: 24 },
+            rx7900xt: { performanceScore: 89, vram: 20 },
+            rx7900gre: { performanceScore: 83, vram: 16 },
+            rx7800xt: { performanceScore: 77, vram: 16 },
+            rx7700xt: { performanceScore: 70, vram: 12 },
+            rx7600xt: { performanceScore: 62, vram: 16 },
+            rx7600: { performanceScore: 58, vram: 8 },
+
+            // AMD RX 6000 Series
+            rx6950xt: { performanceScore: 86, vram: 16 },
+            rx6900xt: { performanceScore: 84, vram: 16 },
+            rx6800xt: { performanceScore: 76, vram: 16 },
+            rx6800: { performanceScore: 74, vram: 16 },
+            rx6750xt: { performanceScore: 68, vram: 12 },
+            rx6700xt: { performanceScore: 66, vram: 12 },
+            rx6700: { performanceScore: 60, vram: 10 },
+            rx6650xt: { performanceScore: 55, vram: 8 },
+            rx6600xt: { performanceScore: 52, vram: 8 },
+            rx6600: { performanceScore: 48, vram: 8 },
+            rx6500xt: { performanceScore: 35, vram: 4 },
+            rx6400: { performanceScore: 30, vram: 4 },
+
+            // AMD RX 5000 Series
+            rx5700xt: { performanceScore: 50, vram: 8 },
+            rx5700: { performanceScore: 48, vram: 8 },
+            rx5600xt: { performanceScore: 42, vram: 6 },
+            rx5500xt: { performanceScore: 35, vram: 4 },
+
+            // AMD RX Vega
+            rxvega64: { performanceScore: 45, vram: 8 },
+            rxvega56: { performanceScore: 40, vram: 8 },
+
+            // Intel Arc
+            arcB580: { performanceScore: 70, vram: 16 }, // Hypothetical
+            arcB570: { performanceScore: 65, vram: 12 }, // Hypothetical
+            arcA770: { performanceScore: 55, vram: 16 },
+            arcA750: { performanceScore: 50, vram: 8 },
+            arcA580: { performanceScore: 45, vram: 8 },
+            arcA380: { performanceScore: 30, vram: 6 },
+            arcA310: { performanceScore: 25, vram: 4 },
+        };
+
+        const cpuPerformanceData = {
+            // Intel 15th Gen (Arrow Lake - Hypothetical data)
+            i9_15th: { performanceScore: 100, cores: 24 },
+            i7_15th: { performanceScore: 95, cores: 16 },
+            i5_15th: { performanceScore: 88, cores: 12 },
+
+            // Intel 14th Gen (Raptor Lake Refresh)
+            i9_14900k: { performanceScore: 98, cores: 24 },
+            i9_14900: { performanceScore: 96, cores: 24 },
+            i7_14700k: { performanceScore: 92, cores: 20 },
+            i7_14700: { performanceScore: 90, cores: 20 },
+            i5_14600k: { performanceScore: 85, cores: 14 },
+            i5_14600: { performanceScore: 83, cores: 14 },
+            i5_14400: { performanceScore: 78, cores: 10 },
+
+            // Intel 13th Gen (Raptor Lake)
+            i9_13900k: { performanceScore: 95, cores: 24 },
+            i9_13900: { performanceScore: 93, cores: 24 },
+            i7_13700k: { performanceScore: 89, cores: 16 },
+            i7_13700: { performanceScore: 87, cores: 16 },
+            i5_13600k: { performanceScore: 82, cores: 14 },
+            i5_13600: { performanceScore: 80, cores: 14 },
+            i5_13400: { performanceScore: 75, cores: 10 },
+
+            // Intel 12th Gen (Alder Lake)
+            i9_12900k: { performanceScore: 88, cores: 16 },
+            i9_12900: { performanceScore: 86, cores: 16 },
+            i7_12700k: { performanceScore: 82, cores: 12 },
+            i7_12700: { performanceScore: 80, cores: 12 },
+            i5_12600k: { performanceScore: 75, cores: 10 },
+            i5_12600: { performanceScore: 73, cores: 10 },
+            i5_12400: { performanceScore: 68, cores: 6 },
+
+            // Intel 11th Gen (Rocket Lake)
+            i9_11900k: { performanceScore: 70, cores: 8 },
+            i7_11700k: { performanceScore: 65, cores: 8 },
+            i5_11600k: { performanceScore: 60, cores: 6 },
+            i5_11400: { performanceScore: 55, cores: 6 },
+
+            // Intel 10th Gen (Comet Lake)
+            i9_10900k: { performanceScore: 60, cores: 10 },
+            i7_10700k: { performanceScore: 55, cores: 8 },
+            i5_10600k: { performanceScore: 50, cores: 6 },
+            i5_10400: { performanceScore: 45, cores: 6 },
+
+            // AMD Ryzen 9000 Series (Zen 5 - Hypothetical data)
+            r9_9950x: { performanceScore: 99, cores: 16 },
+            r9_9900x: { performanceScore: 94, cores: 12 },
+            r7_9800x: { performanceScore: 89, cores: 8 },
+            r7_9700x: { performanceScore: 87, cores: 8 },
+            r5_9600x: { performanceScore: 82, cores: 6 },
+            r5_9500x: { performanceScore: 80, cores: 6 },
+
+            // AMD Ryzen 8000 Series (Zen 4)
+            r9_8950x: { performanceScore: 96, cores: 16 },
+            r7_8800x: { performanceScore: 88, cores: 8 },
+            r5_8600x: { performanceScore: 80, cores: 6 },
+
+            // AMD Ryzen 7000 Series (Zen 4)
+            r9_7950x: { performanceScore: 95, cores: 16 },
+            r9_7900x: { performanceScore: 90, cores: 12 },
+            r7_7800x: { performanceScore: 85, cores: 8 }, // X3D variant often better for gaming
+            r7_7700x: { performanceScore: 83, cores: 8 },
+            r5_7600x: { performanceScore: 78, cores: 6 },
+            r5_7500f: { performanceScore: 75, cores: 6 },
+
+            // AMD Ryzen 6000 Series (Zen 3+)
+            r9_6950x: { performanceScore: 80, cores: 16 },
+            r7_6800x: { performanceScore: 75, cores: 8 },
+            r5_6600x: { performanceScore: 70, cores: 6 },
+
+            // AMD Ryzen 5000 Series (Zen 3)
+            r9_5950x: { performanceScore: 85, cores: 16 },
+            r9_5900x: { performanceScore: 80, cores: 12 },
+            r7_5800x: { performanceScore: 78, cores: 8 }, // X3D variant often better for gaming
+            r7_5700x: { performanceScore: 73, cores: 8 },
+            r5_5600x: { performanceScore: 68, cores: 6 },
+            r5_5500: { performanceScore: 60, cores: 6 },
+            r5_5400g: { performanceScore: 55, cores: 6 },
+
+            // AMD Ryzen 4000 Series (Zen 2)
+            r7_4700g: { performanceScore: 50, cores: 8 },
+            r5_4600g: { performanceScore: 45, cores: 6 },
+            r3_4300g: { performanceScore: 40, cores: 4 },
+
+            // AMD Ryzen 3000 Series (Zen 2)
+            r9_3950x: { performanceScore: 75, cores: 16 },
+            r9_3900x: { performanceScore: 70, cores: 12 },
+            r7_3800x: { performanceScore: 65, cores: 8 },
+            r7_3700x: { performanceScore: 62, cores: 8 },
+            r5_3600x: { performanceScore: 58, cores: 6 },
+            r5_3600: { performanceScore: 55, cores: 6 },
+            r5_3500x: { performanceScore: 50, cores: 6 },
+        };
+
+        // --- DOM Elements ---
+        const gpuModelSelect = document.getElementById('gpuModel');
+        const cpuModelSelect = document.getElementById('cpuModel');
+        const otherGpuFields = document.getElementById('otherGpuFields');
+        const otherCpuFields = document.getElementById('otherCpuFields');
+        const customVramInput = document.getElementById('customVram');
+        const customGpuPerformanceSelect = document.getElementById('customGpuPerformance');
+        const customCpuCoresInput = document.getElementById('customCpuCores');
+        const customCpuPerformanceSelect = document.getElementById('customCpuPerformance');
+        const ramInput = document.getElementById('ramInput');
+        const screenSizeInput = document.getElementById('screenSize');
+        const usageSelect = document.getElementById('usage');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultDiv = document.getElementById('result');
+        const resolutionOutput = document.getElementById('resolutionOutput');
+        const errorMessageDiv = document.getElementById('errorMessage');
+
+        // --- Event Listeners for "Other/Custom" fields ---
+        gpuModelSelect.addEventListener('change', () => {
+            if (gpuModelSelect.value === 'other') {
+                otherGpuFields.style.display = 'block';
+            } else {
+                otherGpuFields.style.display = 'none';
+            }
+        });
+
+        cpuModelSelect.addEventListener('change', () => {
+            if (cpuModelSelect.value === 'other') {
+                otherCpuFields.style.display = 'block';
+            } else {
+                otherCpuFields.style.display = 'none';
+            }
+        });
+
+        // --- Helper Function to show error messages ---
+        function showMessage(message, isError = false) {
+            resultDiv.style.display = 'block';
+            if (isError) {
+                errorMessageDiv.textContent = message;
+                errorMessageDiv.style.display = 'block';
+                resolutionOutput.style.display = 'none'; // Hide resolution card on error
+            } else {
+                resolutionOutput.innerHTML = `<p>${message}</p>`; // Set the message in the resolution card
+                resolutionOutput.style.display = 'block';
+                errorMessageDiv.style.display = 'none'; // Hide error message
+            }
+        }
+
+        // --- Main Calculation Logic ---
+        calculateBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            const gpuModel = gpuModelSelect.value;
+            const cpuModel = cpuModelSelect.value;
+            const ram = parseFloat(ramInput.value);
+            const screenSize = parseFloat(screenSizeInput.value);
+            const usage = usageSelect.value;
+
+            // --- Input Validation ---
+            if (!gpuModel || !cpuModel || isNaN(ram) || ram <= 0 || isNaN(screenSize) || screenSize <= 0) {
+                showMessage("Please fill in all required fields with valid numbers.", true);
+                return;
+            }
+
+            let gpuInfo;
+            if (gpuModel === 'other') {
+                const customVram = parseFloat(customVramInput.value);
+                const customGpuPerfLevel = customGpuPerformanceSelect.value;
+
+                if (isNaN(customVram) || customVram <= 0) {
+                    showMessage("Please enter valid VRAM for custom GPU.", true);
+                    return;
+                }
+
+                // Map custom performance level to a score
+                let customGpuScore;
+                switch (customGpuPerfLevel) {
+                    case 'entry': customGpuScore = 30; break;
+                    case 'mid': customGpuScore = 55; break;
+                    case 'high': customGpuScore = 75; break;
+                    case 'ultra': customGpuScore = 90; break;
+                    default: customGpuScore = 50; // Default to mid if somehow not selected
+                }
+                gpuInfo = { performanceScore: customGpuScore, vram: customVram };
+            } else {
+                gpuInfo = gpuPerformanceData[gpuModel];
+            }
+
+            let cpuInfo;
+            if (cpuModel === 'other') {
+                const customCpuCores = parseInt(customCpuCoresInput.value);
+                const customCpuPerfLevel = customCpuPerformanceSelect.value;
+
+                if (isNaN(customCpuCores) || customCpuCores < 2) {
+                    showMessage("Please enter valid CPU Cores for custom CPU.", true);
+                    return;
+                }
+
+                // Map custom performance level to a score
+                let customCpuScore;
+                switch (customCpuPerfLevel) {
+                    case 'entry': customCpuScore = 30; break;
+                    case 'mid': customCpuScore = 55; break;
+                    case 'high': customCpuScore = 75; break;
+                    case 'ultra': customCpuScore = 90; break;
+                    default: customCpuScore = 50; // Default to mid
+                }
+                cpuInfo = { performanceScore: customCpuScore, cores: customCpuCores };
+            } else {
+                cpuInfo = cpuPerformanceData[cpuModel];
+            }
+
+            if (!gpuInfo || !cpuInfo) {
+                showMessage("Could not retrieve performance data for selected components. Please ensure valid selections.", true);
+                return;
+            }
+
+            // --- Resolution Calculation Logic ---
+            // Base performance score
+            let combinedPerformance = (gpuInfo.performanceScore * 0.65) + (cpuInfo.performanceScore * 0.25); // GPU weighted more heavily
+
+            // Adjust based on RAM
+            if (ram < 8) combinedPerformance -= 15;
+            else if (ram < 16) combinedPerformance -= 5;
+            else if (ram >= 32) combinedPerformance += 5;
+
+            // Adjust based on VRAM (critical for higher resolutions)
+            if (gpuInfo.vram < 4) combinedPerformance -= 20;
+            else if (gpuInfo.vram < 8) combinedPerformance -= 10;
+            else if (gpuInfo.vram >= 16) combinedPerformance += 10;
+            else if (gpuInfo.vram >= 24) combinedPerformance += 15;
+
+            // Adjust for usage type
+            switch (usage) {
+                case 'gaming':
+                    // Gaming is more demanding, so adjust scores down slightly if not high-end
+                    if (combinedPerformance > 70) combinedPerformance *= 1.0; // No change for high-end
+                    else if (combinedPerformance > 50) combinedPerformance *= 0.95; // Slight penalty for mid-range
+                    else combinedPerformance *= 0.9; // More penalty for lower end
+                    break;
+                case 'productivity':
+                case 'programming':
+                    combinedPerformance *= 1.1; // Productivity benefits from more pixels, less raw power
+                    break;
+                case 'content':
+                    combinedPerformance *= 1.05; // Content creation benefits from both power and pixels
+                    if (cpuInfo.cores < 8) combinedPerformance -= 5; // Penalty for low core count
+                    if (gpuInfo.vram < 12) combinedPerformance -= 5; // Penalty for low VRAM
+                    break;
+                case 'browsing':
+                    combinedPerformance *= 1.2; // Very light usage, higher resolution easily achievable
+                    break;
+            }
+
+            // Adjust based on screen size (larger screens often benefit from higher resolutions)
+            if (screenSize >= 32) combinedPerformance += 5;
+            else if (screenSize >= 27) combinedPerformance += 2;
+            else if (screenSize <= 21) combinedPerformance -= 5;
+
+
+            let recommendedResolution = "Unknown";
+            let details = "";
+
+            if (combinedPerformance >= 90) {
+                recommendedResolution = "4K (3840x2160)";
+                details = "Optimal for high-end gaming, professional content creation, and multi-tasking with crisp visuals.";
+            } else if (combinedPerformance >= 75) {
+                recommendedResolution = "1440p (2560x1440)";
+                details = "Excellent for gaming, productivity, and general use, offering a great balance of performance and visual clarity.";
+            } else if (combinedPerformance >= 55) {
+                recommendedResolution = "1080p (1920x1080)";
+                details = "Standard for most gaming and everyday tasks, offering good performance on a wide range of hardware.";
+            } else if (combinedPerformance >= 35) {
+                recommendedResolution = "900p (1600x900)";
+                details = "Suitable for basic productivity and older/less demanding games, especially on smaller monitors.";
+            } else {
+                recommendedResolution = "720p (1280x720)";
+                details = "Best for very entry-level systems, older applications, or extremely small displays.";
+            }
+
+            showMessage(`<h3>${recommendedResolution}</h3><p>${details}</p>`, false);
+        });
+
+        // Initial setup for the result display (hidden by default)
+        document.addEventListener('DOMContentLoaded', () => {
+            resultDiv.style.display = 'none';
+            errorMessageDiv.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
